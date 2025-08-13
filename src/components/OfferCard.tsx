@@ -113,183 +113,158 @@ export const OfferCard = ({
   return (
     <Card
       className={`
-        group relative overflow-hidden cursor-pointer
-        bg-gradient-to-br from-white/95 via-white/90 to-white/85 
+        group relative overflow-hidden
+        bg-white/95
         backdrop-blur-xl border border-white/30
-        shadow-lg transition-all duration-300 ease-out
+        shadow-sm hover:shadow-xl transition-all duration-300 ease-out
         ${getViewModeClasses()}
-        border-white/50
-        ${offer.isApproved ? 'ring-2 ring-green-500/20' : ''}
+        ${offer.isApproved ? 'ring-1 ring-green-500/30 bg-green-50/30' : ''}
+        hover:border-indigo-200/50
       `}
       style={{ animationDelay }}
-      onClick={onClick}
     >
       {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/30 via-purple-50/20 to-pink-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/20 via-purple-50/10 to-pink-50/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       
-      {/* Header Section with Badges */}
-      <div className="relative mb-4">
-        {/* Priority Badge - Positioning based on view mode */}
-        <div className={`absolute z-20 ${
-          viewMode === 'timeline' || viewMode === 'list' 
-            ? 'top-2 right-2' 
-            : '-top-2 -right-2'
-        }`}>
-          <Badge className={`
-            bg-gradient-to-r ${priorityInfo.color} text-white font-semibold text-xs
-            shadow-md border-0 px-2.5 py-1 rounded-full
-          `}>
-            <PriorityIcon className="w-3 h-3 mr-1" />
-            {sortBy === 'rank' ? `#${offer.rank}` : 
-             sortBy === 'discount' ? `${offer.discountPercent}%` :
-             sortBy === 'revenue' ? formatCurrency(offer.revenueTarget) :
-             formatCurrency(offer.offerPrice)}
-          </Badge>
-        </div>
-
-        {/* Discount Badge - Positioning based on view mode */}
-        <div className={`absolute z-20 ${
-          viewMode === 'timeline' || viewMode === 'list' 
-            ? 'top-10 right-2' 
-            : '-top-2 -left-2'
-        }`}>
-          <Badge className={`
-            bg-gradient-to-r ${getDiscountBadgeColor(offer.discountPercent)} 
-            text-white font-bold text-xs shadow-md border-0 px-2.5 py-1 rounded-full
-          `}>
-            <Zap className="w-3 h-3 mr-1" />
-            {offer.discountPercent}% OFF
-          </Badge>
-        </div>
-
-        {/* Approval Status Badge */}
-        {offer.isApproved && (
-          <div className={`absolute z-20 ${
-            viewMode === 'timeline' || viewMode === 'list' 
-              ? 'top-18 right-2' 
-              : 'top-8 -right-1'
-          }`}>
-            <Badge className="bg-green-500 text-white text-xs px-2 py-1 rounded-full">
-              <CheckCircle className="w-3 h-3 mr-1" />
-              Approved
+      {/* Header with Badges */}
+      <div className="relative p-4 pb-2">
+        <div className="flex items-start justify-between mb-3">
+          {/* Left side badges */}
+          <div className="flex items-center gap-2">
+            <Badge className={`
+              bg-gradient-to-r ${priorityInfo.color} text-white font-medium text-xs
+              shadow-sm border-0 px-2 py-1 rounded-md
+            `}>
+              <PriorityIcon className="w-3 h-3 mr-1" />
+              {sortBy === 'rank' ? `#${offer.rank}` : 
+               sortBy === 'discount' ? `${offer.discountPercent}%` :
+               sortBy === 'revenue' ? formatCurrency(offer.revenueTarget) :
+               formatCurrency(offer.offerPrice)}
+            </Badge>
+            
+            <Badge className={`
+              bg-gradient-to-r ${getDiscountBadgeColor(offer.discountPercent)} 
+              text-white font-medium text-xs shadow-sm border-0 px-2 py-1 rounded-md
+            `}>
+              <Zap className="w-3 h-3 mr-1" />
+              {offer.discountPercent}% OFF
             </Badge>
           </div>
-        )}
-      </div>
 
-      <div className={`
-        space-y-4 ${viewMode === 'timeline' || viewMode === 'list' ? 'mt-6' : 'mt-12'}
-        ${viewMode === 'list' ? 'flex-1 flex flex-col justify-center' : ''}
-      `}>
-        {/* Approval Toggle */}
-        <div className="flex items-center justify-between">
-          <h3 className={`
-            font-bold text-gray-800 line-clamp-2 leading-tight
-            transition-colors duration-300
-            ${viewMode === 'compact' ? 'text-base' : 'text-lg'}
-          `}>
-            {offer.offerName}
-          </h3>
-          
-          <div className="flex items-center gap-2 ml-2">
-            <span className="text-xs text-gray-600">Approve:</span>
-            <Switch
-              checked={offer.isApproved || false}
-              onCheckedChange={(checked) => onApprovalToggle(offer.rank, checked)}
-              className="data-[state=checked]:bg-green-500"
-            />
+          {/* Right side - Approval toggle */}
+          <div className="flex items-center gap-2">
+            {offer.isApproved && (
+              <Badge className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-md border border-green-200">
+                <CheckCircle className="w-3 h-3 mr-1" />
+                Approved
+              </Badge>
+            )}
+            <div className="flex items-center gap-1">
+              <span className="text-xs text-gray-500">Approve</span>
+              <Switch
+                checked={offer.isApproved || false}
+                onCheckedChange={(checked) => {
+                  onApprovalToggle(offer.rank, checked);
+                }}
+                onClick={(e) => e.stopPropagation()}
+                className="data-[state=checked]:bg-green-500 scale-75"
+              />
+            </div>
           </div>
         </div>
+      </div>
+
+      {/* Content */}
+      <div className="px-4 pb-4 space-y-3" onClick={onClick}>
+        {/* Title */}
+        <h3 className={`
+          font-semibold text-gray-800 line-clamp-2 leading-tight cursor-pointer
+          hover:text-indigo-600 transition-colors duration-200
+          ${viewMode === 'compact' ? 'text-sm' : 'text-base'}
+        `}>
+          {offer.offerName}
+        </h3>
         
         {/* Star Rating */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 mb-2">
           {[...Array(5)].map((_, i) => (
             <Star 
               key={i} 
-              className={`w-3.5 h-3.5 transition-colors duration-300 ${
+              className={`w-3 h-3 transition-colors duration-300 ${
                 i < Math.floor(4 + offer.discountPercent / 20) 
                   ? 'text-yellow-400 fill-current' 
                   : 'text-gray-300'
               }`} 
             />
           ))}
-          <span className="text-xs text-gray-500 ml-1.5 font-medium">
+          <span className="text-xs text-gray-500 ml-1 font-medium">
             ({Math.floor(4 + offer.discountPercent / 20)}.0)
           </span>
         </div>
 
         {/* Pricing Section */}
-        <div className="space-y-2">
-          <div className="flex items-baseline gap-3 flex-wrap">
+        <div className="space-y-3">
+          <div className="flex items-baseline gap-2 flex-wrap">
             <span className={`
-              font-bold bg-gradient-to-r from-indigo-600 to-purple-600 
+              font-bold bg-gradient-to-r from-indigo-600 to-purple-600
               bg-clip-text text-transparent
-              ${viewMode === 'compact' ? 'text-lg' : 'text-xl'}
+              ${viewMode === 'compact' ? 'text-base' : 'text-lg'}
             `}>
               {formatCurrency(offer.offerPrice)}
             </span>
-            <span className="text-sm text-gray-500 line-through decoration-red-500 decoration-2">
+            <span className="text-sm text-gray-400 line-through">
               {formatCurrency(offer.regularPrice)}
             </span>
           </div>
           
           {/* Savings Badge */}
-          <div className="inline-flex items-center gap-1 bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium">
+          <div className="inline-flex items-center gap-1 bg-green-50 text-green-600 px-2 py-1 rounded-md text-xs font-medium border border-green-200">
             <TrendingUp className="w-3 h-3" />
             Save {formatCurrency(offer.regularPrice - offer.offerPrice)}
           </div>
 
-          {viewMode !== 'compact' && viewMode !== 'timeline' && (
-            <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed mt-2">
+          {viewMode !== 'compact' && (
+            <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
               {offer.offerDetails}
             </p>
           )}
         </div>
 
         {/* Metrics Grid */}
-        {viewMode !== 'compact' && viewMode !== 'timeline' && (
-          <div className={`grid gap-2 ${
+        {viewMode !== 'compact' && (
+          <div className={`grid gap-1.5 ${
             viewMode === 'list' ? 'grid-cols-4' : 'grid-cols-2'
           }`}>
-            <div className="flex items-center gap-2 text-gray-600 bg-blue-50/70 px-2 py-1.5 rounded-lg text-xs">
-              <Users className="w-3.5 h-3.5 text-blue-500" />
+            <div className="flex items-center gap-1.5 text-gray-600 bg-blue-50/50 px-2 py-1 rounded-md text-xs border border-blue-100">
+              <Users className="w-3 h-3 text-blue-500" />
               <span className="font-medium">{offer.targetSales}</span>
             </div>
-            <div className="flex items-center gap-2 text-gray-600 bg-green-50/70 px-2 py-1.5 rounded-lg text-xs">
-              <TrendingUp className="w-3.5 h-3.5 text-green-500" />
+            <div className="flex items-center gap-1.5 text-gray-600 bg-green-50/50 px-2 py-1 rounded-md text-xs border border-green-100">
+              <TrendingUp className="w-3 h-3 text-green-500" />
               <span className="font-medium">{formatCurrency(offer.revenueTarget)}</span>
             </div>
-            <div className="flex items-center gap-2 text-gray-600 bg-purple-50/70 px-2 py-1.5 rounded-lg text-xs">
-              <Target className="w-3.5 h-3.5 text-purple-500" />
+            <div className="flex items-center gap-1.5 text-gray-600 bg-purple-50/50 px-2 py-1 rounded-md text-xs border border-purple-100">
+              <Target className="w-3 h-3 text-purple-500" />
               <span className="font-medium truncate">{offer.leadSource}</span>
             </div>
-            <div className="flex items-center gap-2 text-gray-600 bg-orange-50/70 px-2 py-1.5 rounded-lg text-xs">
-              <Clock className="w-3.5 h-3.5 text-orange-500" />
+            <div className="flex items-center gap-1.5 text-gray-600 bg-orange-50/50 px-2 py-1 rounded-md text-xs border border-orange-100">
+              <Clock className="w-3 h-3 text-orange-500" />
               <span className="font-medium">Active</span>
             </div>
           </div>
         )}
 
-        {/* CTA Message for Analytics */}
-        {viewMode === 'analytics' && (
-          <div className="pt-3 border-t border-gray-200">
-            <p className="text-xs text-gray-500 italic line-clamp-2 bg-gray-50/70 p-2.5 rounded-lg">
-              "{offer.ctaMessage}"
-            </p>
-          </div>
-        )}
-
         {/* Action Button */}
-        <div className="pt-2">
+        <div className="pt-3 border-t border-gray-100">
           <Button
             variant="ghost"
             size="sm"
             className={`
-              w-full bg-gradient-to-r from-indigo-50/70 to-purple-50/70 
-              hover:from-indigo-100/70 hover:to-purple-100/70 
-              text-indigo-700 border border-indigo-200/50 
-              hover:border-indigo-300/50 transition-all duration-300
-              font-medium shadow-sm text-sm
+              w-full bg-gradient-to-r from-indigo-50 to-purple-50
+              hover:from-indigo-100 hover:to-purple-100
+              text-indigo-700 border border-indigo-200
+              hover:border-indigo-300 transition-all duration-200
+              font-medium text-xs h-8
             `}
             onClick={(e) => {
               e.stopPropagation();
@@ -301,9 +276,6 @@ export const OfferCard = ({
           </Button>
         </div>
       </div>
-
-      {/* Corner Decoration */}
-      <div className="absolute bottom-0 right-0 w-12 h-12 bg-gradient-to-tl from-indigo-100/40 to-transparent rounded-tl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
     </Card>
   );
 };

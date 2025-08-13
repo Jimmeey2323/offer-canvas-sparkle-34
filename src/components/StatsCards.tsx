@@ -65,7 +65,7 @@ export const StatsCards = ({
   ];
 
   return (
-    <div className="container mx-auto px-6 -mt-8 relative z-10">
+    <div className="container mx-auto px-6 -mt-6 relative z-10 mb-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
@@ -73,9 +73,9 @@ export const StatsCards = ({
             <Card
               key={stat.title}
               className={`
-                ${stat.bgColor} ${stat.borderColor}
+                ${stat.bgColor} ${stat.borderColor} hover:shadow-lg
                 backdrop-blur-sm border shadow-lg
-                transition-all duration-300
+                transition-all duration-200 hover:scale-105
                 p-6 relative overflow-hidden
               `}
               style={{ animationDelay: `${index * 0.1}s` }}
@@ -88,22 +88,22 @@ export const StatsCards = ({
               <div className="relative">
                 <div className="flex items-center justify-between mb-3">
                   <Icon className={`w-8 h-8 ${stat.color}`} />
-                  <Badge variant="outline" className={`${stat.bgColor} ${stat.borderColor} text-xs`}>
+                  <Badge variant="outline" className={`${stat.bgColor} ${stat.borderColor} text-xs font-medium`}>
                     Live
                   </Badge>
                 </div>
 
-                <h3 className="text-sm font-medium text-gray-600 mb-1">
+                <h3 className="text-sm font-semibold text-gray-700 mb-2">
                   {stat.title}
                 </h3>
 
                 <div className="flex items-baseline gap-2">
-                  <span className={`text-2xl font-bold ${stat.color}`}>
+                  <span className={`text-3xl font-bold ${stat.color}`}>
                     {stat.value}
                   </span>
                 </div>
 
-                <p className="text-xs text-gray-500 mt-2">
+                <p className="text-xs text-gray-500 mt-3">
                   {stat.description}
                 </p>
               </div>

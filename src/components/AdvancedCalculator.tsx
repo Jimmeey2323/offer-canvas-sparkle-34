@@ -4,8 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 import { X, Calculator as CalcIcon, Percent, DivideIcon, Plus, Minus, Equal } from 'lucide-react';
 import { offersData } from '@/data/offers';
+import { pricingPackages, PricingPackage, PricingTier } from '@/data/pricingOptions';
 
 interface AdvancedCalculatorProps {
   isOpen: boolean;
@@ -18,6 +20,8 @@ export const AdvancedCalculator = ({ isOpen, onClose }: AdvancedCalculatorProps)
   const [operation, setOperation] = useState<string | null>(null);
   const [waitingForNewValue, setWaitingForNewValue] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState<string>('');
+  const [selectedPackage, setSelectedPackage] = useState<string>('');
+  const [selectedTier, setSelectedTier] = useState<string>('');
   const [history, setHistory] = useState<string[]>([]);
 
   useEffect(() => {
@@ -145,6 +149,19 @@ export const AdvancedCalculator = ({ isOpen, onClose }: AdvancedCalculatorProps)
     setWaitingForNewValue(true);
   };
 
+  const loadPackagePrice = (packageName: string, tierDuration: string) => {
+    const pkg = pricingPackages.find(p => p.name === packageName);
+    if (pkg) {
+      const tier = pkg.tiers.find(t => t.duration === tierDuration);
+      if (tier) {
+        const calculation = `${packageName} - ${tierDuration}: ${formatCurrency(tier.afterTax)}`;
+        setHistory(prev => [calculation, ...prev.slice(0, 4)]);
+        setDisplay(String(tier.afterTax));
+        setWaitingForNewValue(true);
+      }
+    }
+  };
+
   const loadOfferPrice = (offerName: string) => {
     const offer = offersData.find(o => o.offerName === offerName);
     if (offer) {
@@ -160,19 +177,19 @@ export const AdvancedCalculator = ({ isOpen, onClose }: AdvancedCalculatorProps)
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-lg bg-white/95 backdrop-blur-xl border-0 shadow-2xl">
+      <Card className="w-full max-w-2xl bg-white/95 backdrop-blur-xl border-0 shadow-2xl">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <CalcIcon className="w-5 h-5 text-indigo-600" />
-              <CardTitle className="text-lg">Advanced Calculator</CardTitle>
+              <CardTitle className="text-xl">Advanced Calculator</CardTitle>
             </div>
             <Button variant="ghost" size="sm" onClick={onClose}>
               <X className="w-4 h-4" />
             </Button>
           </div>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6">
           {/* Display */}
           <div className="bg-gray-900 text-white p-4 rounded-lg">
             <div className="text-right">
@@ -188,32 +205,87 @@ export const AdvancedCalculator = ({ isOpen, onClose }: AdvancedCalculatorProps)
             </div>
           </div>
 
-          {/* Offer Selection */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Quick Load Offer Price:</label>
-            <Select value={selectedOffer} onValueChange={loadOfferPrice}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select an offer..." />
-              </SelectTrigger>
-              <SelectContent className="max-h-48">
-                {offersData.map((offer) => (
-                  <SelectItem key={offer.rank} value={offer.offerName}>
-                    <div className="flex items-center gap-2">
-                      <Badge variant="outline" className="text-xs">#{offer.rank}</Badge>
-                      <span className="truncate">{offer.offerName}</span>
-                      <span className="text-xs text-gray-500 ml-auto">
-                        {formatCurrency(offer.regularPrice)}
-                      </span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          {/* Quick Load Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Membership Packages */}
+            <div className="space-y-3">
+              <label className="text-sm font-semibold text-gray-800">Membership Packages:</label>
+              <div className="space-y-2">
+                <Select value={selectedPackage} onValueChange={setSelectedPackage}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select package type..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {pricingPackages.map((pkg) => (
+                      <SelectItem key={pkg.name} value={pkg.name}>
+                        <div className="flex flex-col">
+                          <span className="font-medium">{pkg.name}</span>
+                          <span className="text-xs text-gray-500">{pkg.description}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                
+                {selectedPackage && (
+                  <Select 
+                    value={selectedTier} 
+                    onValueChange={(value) => {
+                      setSelectedTier(value);
+                      loadPackagePrice(selectedPackage, value);
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select duration..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {pricingPackages
+                        .find(p => p.name === selectedPackage)
+                        ?.tiers.map((tier) => (
+                          <SelectItem key={tier.duration} value={tier.duration}>
+                            <div className="flex items-center justify-between w-full">
+                              <span>{tier.duration}</span>
+                              <span className="text-xs text-gray-500 ml-4">
+                                {formatCurrency(tier.afterTax)}
+                              </span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              </div>
+            </div>
+
+            {/* Launch Offers */}
+            <div className="space-y-3">
+              <label className="text-sm font-semibold text-gray-800">Launch Offers:</label>
+              <Select value={selectedOffer} onValueChange={loadOfferPrice}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select an offer..." />
+                </SelectTrigger>
+                <SelectContent className="max-h-48">
+                  {offersData.map((offer) => (
+                    <SelectItem key={offer.rank} value={offer.offerName}>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="text-xs">#{offer.rank}</Badge>
+                        <span className="truncate">{offer.offerName}</span>
+                        <span className="text-xs text-gray-500 ml-auto">
+                          {formatCurrency(offer.regularPrice)}
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
+
+          <Separator />
 
           {/* Enhanced Discount Buttons */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Quick Discounts:</label>
+            <label className="text-sm font-semibold text-gray-800">Quick Discounts:</label>
             <div className="grid grid-cols-4 gap-2">
               {[5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70].map((discount) => (
                 <Button
@@ -233,6 +305,8 @@ export const AdvancedCalculator = ({ isOpen, onClose }: AdvancedCalculatorProps)
               ))}
             </div>
           </div>
+
+          <Separator />
 
           {/* Calculator Buttons */}
           <div className="grid grid-cols-4 gap-2">
@@ -300,7 +374,7 @@ export const AdvancedCalculator = ({ isOpen, onClose }: AdvancedCalculatorProps)
           {/* History */}
           {history.length > 0 && (
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Recent Calculations:</label>
+              <label className="text-sm font-semibold text-gray-800">Recent Calculations:</label>
               <div className="bg-gray-50 rounded-lg p-3 max-h-24 overflow-y-auto">
                 {history.map((calc, index) => (
                   <div key={index} className="text-xs text-gray-600 font-mono">
@@ -314,7 +388,7 @@ export const AdvancedCalculator = ({ isOpen, onClose }: AdvancedCalculatorProps)
           {/* Keyboard Shortcuts */}
           <div className="pt-2 border-t border-gray-200">
             <p className="text-xs text-gray-500 text-center">
-              Keyboard: Numbers, +, -, *, /, %, Enter (=), Esc (Clear), Backspace
+              💡 Keyboard shortcuts: Numbers, +, -, *, /, %, Enter (=), Esc (Clear), Backspace
             </p>
           </div>
         </CardContent>

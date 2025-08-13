@@ -107,17 +107,17 @@ export const AIInsights = ({ offers, formatCurrency }: AIInsightsProps) => {
   return (
     <div className="space-y-6">
       {/* AI Insights Header */}
-      <Card className="bg-gradient-to-r from-purple-50 to-indigo-50 border-0 shadow-lg">
+      <Card className="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-100/50 shadow-lg">
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-lg">
+            <div className="p-3 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-xl shadow-md">
               <Brain className="w-6 h-6 text-white" />
             </div>
             <div>
-              <CardTitle className="text-xl">AI-Powered Insights</CardTitle>
+              <CardTitle className="text-2xl font-bold">AI-Powered Insights</CardTitle>
               <p className="text-sm text-gray-600">Smart recommendations for your launch strategy</p>
             </div>
-            <Badge className="ml-auto bg-gradient-to-r from-green-500 to-emerald-500 text-white animate-pulse">
+            <Badge className="ml-auto bg-gradient-to-r from-green-500 to-emerald-500 text-white font-medium">
               Live Analysis
             </Badge>
           </div>
@@ -125,7 +125,7 @@ export const AIInsights = ({ offers, formatCurrency }: AIInsightsProps) => {
       </Card>
 
       {/* Insight Tabs */}
-      <div className="flex gap-2 overflow-x-auto">
+      <div className="flex gap-2 overflow-x-auto pb-2">
         {insightTabs.map(tab => {
           const Icon = tab.icon;
           return (
@@ -135,8 +135,8 @@ export const AIInsights = ({ offers, formatCurrency }: AIInsightsProps) => {
               onClick={() => setActiveInsight(tab.id)}
               className={`whitespace-nowrap ${
                 activeInsight === tab.id 
-                  ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white' 
-                  : ''
+                  ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow-md' 
+                  : 'hover:bg-gray-50'
               }`}
             >
               <Icon className="w-4 h-4 mr-2" />
@@ -148,8 +148,8 @@ export const AIInsights = ({ offers, formatCurrency }: AIInsightsProps) => {
 
       {/* Performance Insights */}
       {activeInsight === 'performance' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-0 shadow-lg">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100/50 shadow-md hover:shadow-lg transition-shadow">
             <CardContent className="pt-6">
               <div className="flex items-center gap-3 mb-4">
                 <TrendingUp className="w-8 h-8 text-green-600" />
@@ -170,7 +170,7 @@ export const AIInsights = ({ offers, formatCurrency }: AIInsightsProps) => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 border-0 shadow-lg">
+          <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-100/50 shadow-md hover:shadow-lg transition-shadow">
             <CardContent className="pt-6">
               <div className="flex items-center gap-3 mb-4">
                 <Users className="w-8 h-8 text-blue-600" />
@@ -196,7 +196,7 @@ export const AIInsights = ({ offers, formatCurrency }: AIInsightsProps) => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-orange-50 to-red-50 border-0 shadow-lg">
+          <Card className="bg-gradient-to-br from-orange-50 to-red-50 border border-orange-100/50 shadow-md hover:shadow-lg transition-shadow">
             <CardContent className="pt-6">
               <div className="flex items-center gap-3 mb-4">
                 <Zap className="w-8 h-8 text-orange-600" />

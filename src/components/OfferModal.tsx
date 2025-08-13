@@ -14,10 +14,11 @@ interface OfferModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSaveComments: (offerId: number, mitaliComments: string, saachiComments: string, finalRemarks: string) => void;
+  onApprovalToggle: (offerId: number, isApproved: boolean) => void;
   formatCurrency: (amount: number) => string;
 }
 
-export const OfferModal = ({ offer, isOpen, onClose, onSaveComments, formatCurrency }: OfferModalProps) => {
+export const OfferModal = ({ offer, isOpen, onClose, onSaveComments, onApprovalToggle, formatCurrency }: OfferModalProps) => {
   const [mitaliComments, setMitaliComments] = useState(offer?.mitaliComments || '');
   const [saachiComments, setSaachiComments] = useState(offer?.saachiComments || '');
   const [finalRemarks, setFinalRemarks] = useState(offer?.finalRemarks || '');
@@ -46,16 +47,26 @@ export const OfferModal = ({ offer, isOpen, onClose, onSaveComments, formatCurre
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl border-0 shadow-2xl">
+      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto bg-white/98 backdrop-blur-xl border border-gray-200/50 shadow-2xl">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-gray-800 flex items-center gap-3">
-            <Badge className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white">
-              #{offer.rank}
-            </Badge>
-            {offer.offerName}
-            <Badge className="bg-gradient-to-r from-red-500 to-pink-500 text-white animate-pulse">
-              {offer.discountPercent}% OFF
-            </Badge>
+          <DialogTitle className="text-2xl font-bold text-gray-800 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Badge className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white">
+                #{offer.rank}
+              </Badge>
+              {offer.offerName}
+              <Badge className="bg-gradient-to-r from-red-500 to-pink-500 text-white">
+                {offer.discountPercent}% OFF
+              </Badge>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-600">Approve:</span>
+              <Switch
+                checked={offer.isApproved || false}
+                onCheckedChange={(checked) => onApprovalToggle(offer.rank, checked)}
+                className="data-[state=checked]:bg-green-500"
+              />
+            </div>
           </DialogTitle>
         </DialogHeader>
 

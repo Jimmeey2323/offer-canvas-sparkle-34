@@ -174,14 +174,6 @@ const Index = () => {
         <div className="absolute top-32 right-20 w-12 h-12 bg-white/10 rounded-full animate-pulse"></div>
       </div>
 
-      {/* Stats Cards */}
-      <StatsCards 
-        totalRevenue={totalRevenue}
-        totalSales={totalSales}
-        avgDiscount={avgDiscount}
-        formatCurrency={formatCurrency}
-      />
-
       {/* Conditional Components */}
       {showPricing && <PricingStructure />}
       {showAIConfig && <AIConfiguration onClose={() => setShowAIConfig(false)} />}
@@ -196,28 +188,36 @@ const Index = () => {
         </div>
       )}
 
+      {/* Stats Cards - Moved after hero */}
+      <StatsCards 
+        totalRevenue={totalRevenue}
+        totalSales={totalSales}
+        avgDiscount={avgDiscount}
+        formatCurrency={formatCurrency}
+      />
+
       {/* Enhanced Controls Section */}
-      <div className="sticky top-0 z-10 backdrop-blur-xl bg-white/80 border-b border-gray-200/50 shadow-lg">
+      <div className="sticky top-0 z-10 backdrop-blur-xl bg-white/90 border-b border-gray-200/30 shadow-sm">
         <div className="container mx-auto px-6 py-4">
-          <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+          <div className="flex flex-col xl:flex-row gap-4 items-center justify-between">
             {/* Search */}
-            <div className="relative flex-1 max-w-md">
+            <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
                 placeholder="Search offers, details, or lead sources..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-white/60 border-gray-300/50 focus:bg-white transition-all duration-300 shadow-sm focus:shadow-md"
+                className="pl-10 bg-white/70 border-gray-200/50 focus:bg-white transition-all duration-200 text-sm"
               />
             </div>
 
             {/* Enhanced Action Buttons */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <Button 
                 onClick={() => setShowApprovedOnly(!showApprovedOnly)}
                 size="sm"
                 variant={showApprovedOnly ? "default" : "outline"}
-                className={showApprovedOnly ? "bg-green-600 text-white" : ""}
+                className={`text-xs ${showApprovedOnly ? "bg-green-600 text-white" : ""}`}
               >
                 <CheckCircle className="w-4 h-4 mr-2" />
                 {showApprovedOnly ? 'All Offers' : 'Approved Only'}
@@ -227,7 +227,7 @@ const Index = () => {
                 onClick={() => setShowExportModal(true)}
                 size="sm"
                 disabled={approvedOffers.length === 0}
-                className="bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white"
+                className="bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white text-xs"
               >
                 <Download className="w-4 h-4 mr-2" />
                 Export ({approvedOffers.length})
@@ -236,7 +236,7 @@ const Index = () => {
               <Button 
                 onClick={() => setShowAIAnalytics(!showAIAnalytics)}
                 size="sm"
-                className="bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white"
+                className="bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white text-xs"
               >
                 <Brain className="w-4 h-4 mr-2" />
                 AI Analytics
@@ -245,7 +245,7 @@ const Index = () => {
               <Button 
                 onClick={() => setShowCalculator(true)}
                 size="sm"
-                className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white"
+                className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white text-xs"
               >
                 <CalcIcon className="w-4 h-4 mr-2" />
                 Calculator
@@ -262,15 +262,15 @@ const Index = () => {
 
             {/* Quick Stats */}
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="bg-indigo-50 text-indigo-700 border-indigo-200">
+              <Badge variant="outline" className="bg-indigo-50 text-indigo-700 border-indigo-200 text-xs">
                 <Sparkles className="w-3 h-3 mr-1" />
                 {filteredOffers.length} offers
               </Badge>
-              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-xs">
                 <CheckCircle className="w-3 h-3 mr-1" />
                 {approvedOffers.length} approved
               </Badge>
-              <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
+              <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 text-xs">
                 {formatCurrency(totalRevenue)} target
               </Badge>
             </div>
@@ -281,7 +281,7 @@ const Index = () => {
             <div className="flex items-center gap-2 mt-3 animate-fade-in">
               <Filter className="w-4 h-4 text-gray-500" />
               <span className="text-sm text-gray-600">Active filters:</span>
-              <Badge variant="secondary" className="bg-indigo-100 text-indigo-700 animate-pulse">
+              <Badge variant="secondary" className="bg-indigo-100 text-indigo-700 text-xs">
                 Search: {searchTerm}
               </Badge>
             </div>
@@ -290,7 +290,7 @@ const Index = () => {
       </div>
 
       {/* Enhanced Offers Grid */}
-      <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto px-6 py-6">
         <div className={`grid gap-6 ${
           viewMode === 'list' ? 'grid-cols-1' :
           viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' :
@@ -325,7 +325,7 @@ const Index = () => {
         {/* Enhanced Empty State */}
         {filteredOffers.length === 0 && (
           <div className="text-center py-16">
-            <div className="bg-white/60 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-8 inline-block shadow-xl">
+            <div className="bg-white/70 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-8 inline-block shadow-lg">
               <Search className="w-12 h-12 text-gray-400 mx-auto mb-4 animate-pulse" />
               <h3 className="text-xl font-semibold text-gray-700 mb-2">No offers found</h3>
               <p className="text-gray-500 mb-4">Try adjusting your search terms or filters</p>
@@ -356,6 +356,7 @@ const Index = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSaveComments={handleSaveComments}
+        onApprovalToggle={handleApprovalToggle}
         formatCurrency={formatCurrency}
       />
     </div>
