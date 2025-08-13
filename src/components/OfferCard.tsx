@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -113,7 +112,7 @@ export const OfferCard = ({
   return (
     <Card
       className={`
-        group relative overflow-hidden
+        group relative overflow-hidden cursor-pointer
         bg-white/95
         backdrop-blur-xl border border-white/30
         shadow-sm hover:shadow-xl transition-all duration-300 ease-out
@@ -122,6 +121,7 @@ export const OfferCard = ({
         hover:border-indigo-200/50
       `}
       style={{ animationDelay }}
+      onClick={onClick}
     >
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/20 via-purple-50/10 to-pink-50/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -152,7 +152,7 @@ export const OfferCard = ({
           </div>
 
           {/* Right side - Approval toggle */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
             {offer.isApproved && (
               <Badge className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-md border border-green-200">
                 <CheckCircle className="w-3 h-3 mr-1" />
@@ -166,7 +166,6 @@ export const OfferCard = ({
                 onCheckedChange={(checked) => {
                   onApprovalToggle(offer.rank, checked);
                 }}
-                onClick={(e) => e.stopPropagation()}
                 className="data-[state=checked]:bg-green-500 scale-75"
               />
             </div>
@@ -175,10 +174,10 @@ export const OfferCard = ({
       </div>
 
       {/* Content */}
-      <div className="px-4 pb-4 space-y-3" onClick={onClick}>
+      <div className="px-4 pb-4 space-y-3">
         {/* Title */}
         <h3 className={`
-          font-semibold text-gray-800 line-clamp-2 leading-tight cursor-pointer
+          font-semibold text-gray-800 line-clamp-2 leading-tight
           hover:text-indigo-600 transition-colors duration-200
           ${viewMode === 'compact' ? 'text-sm' : 'text-base'}
         `}>
