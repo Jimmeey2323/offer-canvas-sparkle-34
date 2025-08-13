@@ -112,6 +112,16 @@ const Index = () => {
     );
   };
 
+  const handleSaveOffer = (offerId: number, updatedOffer: Partial<Offer>) => {
+    setOffers(prevOffers =>
+      prevOffers.map(offer =>
+        offer.rank === offerId
+          ? { ...offer, ...updatedOffer }
+          : offer
+      )
+    );
+  };
+
   const handleSortChange = (value: string) => {
     setSortBy(value as 'rank' | 'discount' | 'revenue' | 'price');
   };
@@ -357,6 +367,7 @@ const Index = () => {
         onClose={() => setIsModalOpen(false)}
         onSaveComments={handleSaveComments}
         onApprovalToggle={handleApprovalToggle}
+        onSaveOffer={handleSaveOffer}
         formatCurrency={formatCurrency}
       />
     </div>
