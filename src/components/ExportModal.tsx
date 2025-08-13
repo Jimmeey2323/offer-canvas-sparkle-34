@@ -187,7 +187,7 @@ export const ExportModal = ({ isOpen, onClose, approvedOffers, formatCurrency }:
               <Checkbox
                 id="include-details"
                 checked={includeDetails}
-                onCheckedChange={setIncludeDetails}
+                onCheckedChange={(checked) => setIncludeDetails(checked === true)}
               />
               <label htmlFor="include-details" className="text-sm">
                 Include detailed descriptions and CRM requirements
