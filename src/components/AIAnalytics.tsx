@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -161,17 +160,17 @@ export const AIAnalytics = ({ offers, formatCurrency }: AIAnalyticsProps) => {
   return (
     <div className="space-y-6">
       {/* AI Analytics Header */}
-      <Card className="bg-gradient-to-r from-purple-50 to-indigo-50 border-0 shadow-lg">
+      <Card className="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-100/50 shadow-lg">
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-xl">
+            <div className="p-3 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-xl shadow-md">
               <Brain className="w-6 h-6 text-white" />
             </div>
             <div>
-              <CardTitle className="text-xl text-gray-800">AI Analytics Dashboard</CardTitle>
+              <CardTitle className="text-2xl font-bold text-gray-800">AI Analytics Dashboard</CardTitle>
               <p className="text-sm text-gray-600">Advanced insights and predictive analytics</p>
             </div>
-            <Badge className="ml-auto bg-gradient-to-r from-green-500 to-emerald-500 text-white animate-pulse">
+            <Badge className="ml-auto bg-gradient-to-r from-green-500 to-emerald-500 text-white font-medium">
               Live Analysis
             </Badge>
           </div>
@@ -180,7 +179,7 @@ export const AIAnalytics = ({ offers, formatCurrency }: AIAnalyticsProps) => {
 
       {/* Analytics Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-4 bg-gray-100/80">
+        <TabsList className="grid w-full grid-cols-4 bg-gray-50/80 border border-gray-200/50">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="predictive">Predictive</TabsTrigger>
           <TabsTrigger value="recommendations">AI Recommendations</TabsTrigger>
@@ -189,8 +188,8 @@ export const AIAnalytics = ({ offers, formatCurrency }: AIAnalyticsProps) => {
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 border-0 shadow-lg">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-100/50 shadow-md hover:shadow-lg transition-shadow">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3 mb-3">
                   <DollarSign className="w-8 h-8 text-blue-600" />
@@ -204,7 +203,7 @@ export const AIAnalytics = ({ offers, formatCurrency }: AIAnalyticsProps) => {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-0 shadow-lg">
+            <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100/50 shadow-md hover:shadow-lg transition-shadow">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3 mb-3">
                   <Users className="w-8 h-8 text-green-600" />
@@ -218,7 +217,7 @@ export const AIAnalytics = ({ offers, formatCurrency }: AIAnalyticsProps) => {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-orange-50 to-red-50 border-0 shadow-lg">
+            <Card className="bg-gradient-to-br from-orange-50 to-red-50 border border-orange-100/50 shadow-md hover:shadow-lg transition-shadow">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3 mb-3">
                   <Zap className="w-8 h-8 text-orange-600" />
@@ -232,7 +231,7 @@ export const AIAnalytics = ({ offers, formatCurrency }: AIAnalyticsProps) => {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-0 shadow-lg">
+            <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100/50 shadow-md hover:shadow-lg transition-shadow">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3 mb-3">
                   <PieChart className="w-8 h-8 text-purple-600" />
